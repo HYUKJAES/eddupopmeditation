@@ -13,6 +13,14 @@
   let agree = false;
   let errorMsg = '';
 
+  function getKoreanDay(dateStr: string) {
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    // 'YYYY-MM-DD'를 안전하게 파싱
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const d = new Date(year, month - 1, day); // 월은 0부터 시작
+    return days[d.getDay()];
+  }
+
   onMount(async () => {
     initialLoading = true;
     const { data } = await supabase
@@ -70,7 +78,7 @@
   <h1 class="text-xl text-black font-bold mb-4">티벳 싱잉볼 1:1 세션 신청</h1>
   <div class="text-black">
     {#each Object.keys(slots) as date (date)}
-      <h2 class="font-semibold">{date}</h2>
+      <h2 class="font-semibold">{date} ({getKoreanDay(date)})</h2>
       <div class="flex flex-wrap mb-4">
         {#each slots[date] as slot}
           {#if slot.reserved_count < slot.max_capacity}
@@ -91,7 +99,7 @@
   <div class="mb-4 grid grid-cols-2 gap-2 text-black">
     <div class="bg-white rounded-lg shadow p-3 text-center">
       <div class="text-xs">선택 날짜</div>
-      <div class="font-bold text-base">{selectedDate || '-'}</div>
+      <div class="font-bold text-base">{selectedDate ? `${selectedDate} (${getKoreanDay(selectedDate)})`: '-'}</div>
     </div>
     <div class="bg-white rounded-lg shadow p-3 text-center">
       <div class="text-xs">선택 시간</div>
