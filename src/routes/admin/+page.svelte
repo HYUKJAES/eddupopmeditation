@@ -31,24 +31,25 @@
     }
   }
 
-  async function sendSMS(phone: string, name: string) {
-    // 실제로는 백엔드 API를 만들어 호출해야 합니다.
-    // 예시: /api/send-sms 엔드포인트로 POST 요청
-    const message = `[EDDU] ${name}님, 싱잉볼 클래스 예약이 확정되었습니다. 문의: 010-1234-5678`;
-    try {
-      const res = await fetch('/api/send-sms', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, message })
-      });
-      if (res.ok) {
-        alert('문자가 전송되었습니다.');
-      } else {
-        alert('문자 전송에 실패했습니다.');
-      }
-    } catch (e) {
-      alert('문자 전송 중 오류가 발생했습니다.');
+  async function copyToClipboard(messageTemplate) {
+        try {
+            await navigator.clipboard.writeText(messageTemplate);
+            console.log('메시지가 클립보드에 복사되었습니다!');
+        } catch (err) {
+            console.error('클립보드 복사 실패:', err);
+        }
     }
+
+  function sendSMS(userphone, username) {
+        const messageTemplate = `[이뚜's Pop Meditation] 초보 힐러의 성장과정에 기꺼이 마루타로 시간내어 주심에 진심으로 고개 숙여 감사의 인사를 전하며, 안내사항을 전달합니다. 
+            준비사항: 단추, 버클 없는 편안한 옷차림 
+            주소: 울산 중구 학성로1, 103동 3083호 (마제스타워 1차, 우정동) 8층
+            주차 : 정문 로비 앞쪽 도로 혹은 아파트 주차장 - 출입 시 인터폰콜`;
+
+            // 클립보드에 메시지 복사
+            copyToClipboard(messageTemplate);
+            const smsUrl = `sms:${userphone}`;
+            window.location.href = smsUrl;
   }
 </script>
 

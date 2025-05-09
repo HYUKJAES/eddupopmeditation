@@ -2,17 +2,20 @@
   import img1 from '$lib/image/1.png';
   import img2 from '$lib/image/2.png';
   import img3 from '$lib/image/3.png';
+  import img4 from '$lib/image/4.png';
+  import img5 from '$lib/image/5.png';
+
   import { onMount, onDestroy } from 'svelte';
   import { goto } from '$app/navigation';
   
-  const images = [img1, img2, img3];
+  const images = [img1, img2, img3, img4, img5];
   let selectedIndex = 0;
   let intervalId;
 
   onMount(() => {
     intervalId = setInterval(() => {
       selectedIndex = (selectedIndex + 1) % images.length;
-    }, 7000);
+    }, 5000);
   });
   onDestroy(() => {
     clearInterval(intervalId);

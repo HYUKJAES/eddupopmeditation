@@ -116,7 +116,7 @@
     </div>
   </div>
 
-  <button class="btn bg-gray-800 w-full" on:click={apply} disabled={loading || !selectedSlot || !name || !phone || !agree}>
+  <button class="btn bg-gray-800 text-white w-full" on:click={apply} disabled={loading || !selectedSlot || !name || !phone || !agree}>
     {loading ? '신청 중...' : '최종 신청하기'}
   </button>
   {#if errorMsg}
