@@ -67,7 +67,7 @@
   </div>
 {:else}
 <div class="p-4 bg-gray-100 text-black min-h-screen">
-  <h1 class="text-xl text-black font-bold mb-4">싱잉볼 일일 체험 클래스 신청</h1>
+  <h1 class="text-xl text-black font-bold mb-4">티벳 싱잉볼 1:1 세션 신청</h1>
   <div class="text-black">
     {#each Object.keys(slots) as date (date)}
       <h2 class="font-semibold">{date}</h2>
