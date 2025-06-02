@@ -8,7 +8,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { goto } from '$app/navigation';
   
-  const images = [img1, img2, img3, img4, img5];
+  const images = [img1, img2, img3, img4];
   let selectedIndex = 0;
   let intervalId;
 

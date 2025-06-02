@@ -7,7 +7,7 @@
   let loading = false;
   let reservations = [];
   const correctPass = import.meta.env.VITE_ADMIN_PASSWORD; // 올바른 ADMINPASS를 여기에 설정
-  
+
   async function checkPassword() {
     errorMsg = '';
     if (password === correctPass) {
@@ -17,6 +17,7 @@
       const { data, error } = await supabase
         .from('class_reservations')
         .select('*')
+        .order('status', { ascending: false }) 
         .order('date', { ascending: true })
         .order('time', { ascending: true });
       if (error) {
@@ -39,6 +40,20 @@
             console.error('클립보드 복사 실패:', err);
         }
     }
+
+  async function updateReservationStatus(id, status) {
+    const { error } = await supabase
+      .from('class_reservations')
+      .update({ status: status })
+      .eq('id', id);
+    if (error) {
+      console.error('예약 상태 업데이트에 실패했습니다.');
+    } else {
+      console.log('예약 상태가 성공적으로 업데이트되었습니다.');
+      // 업데이트된 예약 상태로 목록을 새로 불러옵니다.
+      checkPassword();
+    }
+  }
 
   function sendSMS(userphone, username) {
         const messageTemplate = `[이뚜's Pop Meditation] 초보 힐러의 성장과정에 기꺼이 마루타로 시간내어 주심에 진심으로 고개 숙여 감사의 인사를 전하며, 안내사항을 전달합니다. 
@@ -67,7 +82,7 @@
       {/if}
     </div>
   {:else}
-    <div class="bg-white rounded-xl shadow-lg w-full max-w-2xl p-4">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-2xl p-1">
       <h1 class="text-xl font-bold mb-4">예약 신청 리스트</h1>
       {#if loading}
         <div class="flex flex-col items-center justify-center py-2">
@@ -82,24 +97,32 @@
             <table class="table w-full border text-sm">
               <thead class="bg-black text-white">
                 <tr>
-                  <th class="px-4 py-3 text-center">예약일시</th>
-                  <th class="px-4 py-3 text-center">예약자/연락처</th>
-                  <th class="px-4 py-3 text-center">SMS</th>
+                  <th class="px-2 py-2 text-center">예약일시</th>
+                  <th class="px-2 py-2 text-center">예약자/연락처</th>
+                  <th class="px-2 py-2 text-center">SMS</th>
+                  <th class="px-2 py-2 text-center">완료</th>
                 </tr>
               </thead>
               <tbody>
                 {#each reservations as r}
                   <tr class="border-b border-gray-300 hover:bg-gray-50">
-                    <td class="px-4 py-2 whitespace-nowrap text-center">
+                    <td class="px-2 py-2 whitespace-nowrap text-center">
                       <div class="font-semibold">{r.date}</div>
                       <div class="text-xs text-gray-500">{r.time}</div>
                     </td>
-                    <td class="px-4 py-2 whitespace-nowrap text-center">
+                    <td class="px-2 py-2 whitespace-nowrap text-center">
                       <div class="font-semibold">{r.name}</div>
                       <div class="text-xs text-gray-500">{r.phone}</div>
                     </td>
                     <td>
                       <button class="btn btn-xs" on:click={() => sendSMS(r.phone, r.name)}>📩</button>
+                    </td>
+                    <td class="text-center">
+                      {#if r.status === 'F'}
+                        <button class="btn btn-xs bg-green-700 text-white" on:click={() => updateReservationStatus(r.id, '')}>완료</button>
+                      {:else}
+                        <button class="btn btn-xs" on:click={() => updateReservationStatus(r.id, 'F')}>미완료</button>
+                      {/if}
                     </td>
                   </tr>
                 {/each}
