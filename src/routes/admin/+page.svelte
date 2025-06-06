@@ -56,12 +56,10 @@
   }
 
   function sendSMS(userphone, username) {
-        const messageTemplate = `[이뚜's Pop Meditation] 초보 힐러의 성장과정에 기꺼이 마루타로 시간내어 주심에 진심으로 고개 숙여 감사의 인사를 전하며, 안내사항을 전달합니다. 
-
+        const messageTemplate = `
+        [이뚜's Pop Meditation] 초보 힐러의 성장과정에 기꺼이 마루타로 시간내어 주심에 진심으로 고개 숙여 감사의 인사를 전하며, 안내사항을 전달합니다. 
 준비사항: 단추, 버클 없는 편안한 옷차림 
-
 주소: 울산 중구 학성로1, 103동 3083호 (마제스타워 1차, 우정동) 8층
-
 주차 : 정문 로비 앞쪽 도로 혹은 아파트 주차장 - 출입 시 인터폰콜`;
 
             // 클립보드에 메시지 복사
@@ -94,34 +92,34 @@
           <div class="text-gray-800">신청 내역이 없습니다.</div>
         {:else}
           <div class="overflow-x-auto">
-            <table class="table w-full border text-sm">
+            <table class="table w-full border text-sm table-compact">
               <thead class="bg-black text-white">
                 <tr>
-                  <th class="px-2 py-2 text-center">예약일시</th>
-                  <th class="px-2 py-2 text-center">예약자/연락처</th>
-                  <th class="px-2 py-2 text-center">SMS</th>
-                  <th class="px-2 py-2 text-center">완료</th>
+                  <th class="py-1 px-1 text-center">예약일시</th>
+                  <th class="py-1 px-1 text-center">예약자/연락처</th>
+                  <th class="py-1 px-1 text-center">SMS</th>
+                  <th class="py-1 px-1 text-center">완료</th>
                 </tr>
               </thead>
               <tbody>
                 {#each reservations as r}
                   <tr class="border-b border-gray-300 hover:bg-gray-50">
-                    <td class="px-2 py-2 whitespace-nowrap text-center">
+                    <td class="py-1 px-1 whitespace-nowrap text-center">
                       <div class="font-semibold">{r.date}</div>
                       <div class="text-xs text-gray-500">{r.time}</div>
                     </td>
-                    <td class="px-2 py-2 whitespace-nowrap text-center">
+                    <td class="py-1 px-1 whitespace-nowrap text-center">
                       <div class="font-semibold">{r.name}</div>
                       <div class="text-xs text-gray-500">{r.phone}</div>
                     </td>
-                    <td>
+                    <td class="py-1 px-1 text-center">
                       <button class="btn btn-xs" on:click={() => sendSMS(r.phone, r.name)}>📩</button>
                     </td>
-                    <td class="text-center">
+                    <td class="py-1 px-1 text-center">
                       {#if r.status === 'F'}
-                        <button class="btn btn-xs bg-green-700 text-white" on:click={() => updateReservationStatus(r.id, '')}>완료</button>
+                        <button class="btn btn-xs bg-green-700 text-white w-12" on:click={() => updateReservationStatus(r.id, '')}>완료</button>
                       {:else}
-                        <button class="btn btn-xs" on:click={() => updateReservationStatus(r.id, 'F')}>미완료</button>
+                        <button class="btn btn-xs w-12" on:click={() => updateReservationStatus(r.id, 'F')}>미완료</button>
                       {/if}
                     </td>
                   </tr>
