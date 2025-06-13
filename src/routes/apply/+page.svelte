@@ -26,7 +26,8 @@
     const { data } = await supabase
       .from('class_reservations')
       .select('*')
-      .gte('date', new Date().toISOString().slice(0, 10));
+      .gte('date', new Date().toISOString().slice(0, 10))
+      .eq('reserved_count', 0);
     slots = data.reduce((acc, slot) => {
       const date = slot.date;
       if (!acc[date]) {
@@ -35,6 +36,7 @@
       acc[date].push(slot);
       return acc;
     }, {});
+    console.log('예약 가능한 슬롯:', slots);
     initialLoading = false;
   });
 
